@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Регистрация</title>
+</head>
+
+<body>
+<div>
+    <form th:action="@{/connect/registration}" th:method="post" th:object="${user}">
+        <h2>Регистрация</h2>
+        <div>
+            <input type="text" th:field="*{username}" placeholder="Username" autofocus="true"/>
+            <div th:if="${#fields.hasErrors('username')}">
+                <p style="color: red" th:each="error : ${#fields.errors('username')}" th:text="${error}"></p>
+            </div>
+            <p th:text="${usernameError}"></p>
+        </div>
+        <div>
+            <div>
+                <input type="text" th:field="*{age}" placeholder="age" autofocus="true"/>
+                <div th:if="${#fields.hasErrors('age')}">
+                    <p style="color: red" th:each="error : ${#fields.errors('age')}" th:text="${error}"></p>
+                </div>
+                <p th:text="${ageError}"></p>
+            </div>
+            <div>
+                <input type="password" th:field="*{password}" placeholder="Password"/>
+            </div>
+            <div>
+                <div th:if="${#fields.hasErrors('password')}">
+                    <p style="color: red" th:each="error : ${#fields.errors('password')}" th:text="${error}"></p>
+                </div>
+                <p th:text="${passwordError}"></p>
+            </div>
+        </div>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+</div>
+</body>
+</html>
