@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/connect")
 public class RegistrationController {
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public RegistrationController(UserService userService) {
+    public RegistrationController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

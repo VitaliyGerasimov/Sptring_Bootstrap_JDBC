@@ -10,19 +10,19 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import ru.kata.spring.boot_security.demo.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandle successUserHandle;
+    private final UserServiceImpl userService;
 
     @Autowired
     @Lazy
-    UserService userService;
-
-    public WebSecurityConfig(SuccessUserHandle successUserHandle) {
+    public WebSecurityConfig(SuccessUserHandle successUserHandle, UserServiceImpl userService) {
         this.successUserHandle = successUserHandle;
+        this.userService = userService;
     }
 
 
