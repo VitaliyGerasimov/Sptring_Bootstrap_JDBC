@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
@@ -22,6 +21,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService,UserDetailsService {
     @PersistenceContext
     private EntityManager entityManager;
+
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
@@ -39,57 +39,54 @@ public class UserServiceImpl implements UserService,UserDetailsService {
         return user;
     }
 
-    @Transactional
     @Override
-    public void validate(User user, BindingResult bindingResult) {
-        Optional<User> userOptional = userRepository.findByUsername(user.getUsername());
-        if (userOptional.isPresent()) {
-            bindingResult.rejectValue("username", "error.user", "Пользователь с таким именем уже существует");
-        }
-    }
-
     @Transactional
-    @Override
     public User findByUsername(String username) {
         Optional<User> userOptional = userRepository.findByUsername(username);
         return userOptional.orElse(null);
     }
 
-    @Transactional
     @Override
-    public void register(User user) {
+    @Transactional
+    public void createNewUser(User user) {
         Role userRole = roleRepository.findById(1L).orElseThrow(() -> new RuntimeException("Role not found"));
         user.setRoles(Collections.singleton(userRole));
         userRepository.save(user);
     }
+
     @Override
     public List<User> allUsers() {
         return userRepository.findAll();
     }
+
     @Override
-    public User getUserById(Long id) {
-        return entityManager.find(User.class, id);
-    }
     @Transactional
-    @Override
     public void deleteUser(Long id) {
         entityManager.remove(entityManager.find(User.class, id));
     }
+
     @Override
-    public List<User> usergtList(Long idMin) {
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.id > :paramId", User.class)
-                .setParameter("paramId", idMin).getResultList();
+    @Transactional
+    public User getUser(Long id) {
+        return userRepository.findById(id).get();
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void update(Long id, User user) {
         User existingUser = entityManager.find(User.class, id);
         if (existingUser != null) {
             existingUser.setUsername(user.getUsername());
             existingUser.setPassword(user.getPassword());
-            existingUser.setAge(user.getAge());
+            existingUser.setRoles(user.getRoles());
+            existingUser.setName(user.getName());
+            existingUser.setLast_name(user.getLast_name());
             entityManager.merge(existingUser);
         }
+    }
+
+    @Override
+    public List<Role> getAllRoles() {
+        return roleRepository.findAll();
     }
 }

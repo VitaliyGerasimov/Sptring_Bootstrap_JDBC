@@ -4,7 +4,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Set;
@@ -16,14 +15,18 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotEmpty(message = "Имя не должно быть пустым")
-    @Size(min = 2, max = 50, message = "Имя должно содержать от 2 до 50 символов")
-    @Column
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "last_name")
+    private String last_name;
+
+    @Size(min = 2, max = 50, message = "Mail должен содержать от 2 до 50 символов")
+    @Column(name = "email", nullable = false, unique = true)
     private String username;
     @Column
     private String password;
-    @Column
-    private int age;
+
     @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
@@ -36,9 +39,28 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, int age) {
+    public User(String name, String last_name, String username) {
+        this.name = name;
+        this.last_name = last_name;
         this.username = username;
-        this.age = age;
+
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
     public long getId() {
@@ -92,13 +114,6 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
 
     public Set<Role> getRoles() {
         return roles;
@@ -112,9 +127,10 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
+                ", name='" + name + '\'' +
+                ", last_name='" + last_name + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", age=" + age +
                 ", roles=" + roles +
                 '}';
     }

@@ -17,41 +17,30 @@ import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/connect")
-public class RegistrationController {
+@RequestMapping("/")
+public class UserController {
     private final UserServiceImpl userService;
 
     @Autowired
-    public RegistrationController(UserServiceImpl userService) {
+    public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login";
+        return "loginPage";
     }
 
     @GetMapping("/user")
     public String userHome(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        User user = userService.findByUsername(userDetails.getUsername());
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("password", user.getPassword());
-        model.addAttribute("age", user.getAge());
-        return "user";
-    }
-
-    @GetMapping("/registration")
-    public String registration(@ModelAttribute("user") User user) {
-        return "registration";
-    }
-
-    @PostMapping("/registration")
-    public String performRegistration(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
-        userService.validate(user, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "registration";
+        if (userDetails != null) {
+            User user = userService.findByUsername(userDetails.getUsername());
+            if (user != null) {
+                model.addAttribute("user", userService.getUser(user.getId()));
+                System.out.println("Успешно: user id" + user.getId());
+                model.addAttribute("titleTable", "Страница пользователя: ");
+            }
         }
-        userService.register(user);
-        return "redirect:/connect/login";
+        return "user";
     }
 }
