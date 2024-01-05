@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{css/bootstrap.min.css}" rel="stylesheet">
+    <title>Welcome to Your App</title>
+</head>
+<body>
+<div class="container text-center mt-5">
+    <h1 class="display-4">Добро пожаловать!</h1>
+    <p class="lead">Выберите действие, которое вы хотите выполнить:</p>
+
+    <div class="row mt-5">
+        <div class="col">
+            <a href="/registration" class="btn btn-primary btn-lg">Регистрация</a>
+        </div>
+        <div class="col">
+            <a href="/login" class="btn btn-success btn-lg">Войти в систему</a>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

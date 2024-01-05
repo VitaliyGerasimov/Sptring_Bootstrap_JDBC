@@ -89,4 +89,5 @@ public class UserServiceImpl implements UserService,UserDetailsService {
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
+
 }

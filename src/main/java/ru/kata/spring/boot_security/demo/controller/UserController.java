@@ -25,6 +25,10 @@ public class UserController {
     public UserController(UserServiceImpl userService) {
         this.userService = userService;
     }
+    @GetMapping("/")
+    public String welcome() {
+        return "welcome";
+    }
 
     @GetMapping("/login")
     public String loginPage() {
