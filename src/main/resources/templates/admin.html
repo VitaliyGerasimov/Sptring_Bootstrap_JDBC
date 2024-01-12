@@ -282,7 +282,7 @@
                                 <div class="card-body text-center">
                                     <form id="formNewUser" name="formNewUser" th:align="center"
                                           th:action="@{/admin}"
-                                          th:object="${userNew}"
+                                          th:object="${user}"
                                           method="POST">
                                         <p>
                                             <label class="container-fluid" for="newUserFirstName">
@@ -319,7 +319,7 @@
                                         </p>
                                         <label class="container-fluid" for="newUserRoles">
                                             <strong>Role</strong>
-                                            <select id="newUserRoles" class="form-select" name="roles"
+                                            <select id="newUserRoles" class="form-select" name="role"
                                                     multiple size="2">
                                                 <option th:each="role: ${rolesAdd}" th:value="${role.getId()}" >
                                                     <th:block th:text="${role.getName()}">

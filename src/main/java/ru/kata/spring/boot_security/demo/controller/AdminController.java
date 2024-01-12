@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 import java.security.Principal;
@@ -14,7 +15,8 @@ import java.security.Principal;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
+    private static final String REDIRECT_ADMIN = "redirect:/admin";
 
     @Autowired
     public AdminController(UserServiceImpl userService) {
@@ -33,18 +35,18 @@ public class AdminController {
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") long id) {
         userService.deleteUser(id);
-        return "redirect:/admin";
+        return REDIRECT_ADMIN;
     }
 
     @PostMapping("/{id}")
     public String update(@ModelAttribute("user") User user, @PathVariable("id") long id) {
         userService.update(id, user);
-        return "redirect:/admin";
+        return REDIRECT_ADMIN;
     }
 
     @PostMapping()
-    public String addCreateNewUser(@ModelAttribute("user") User user) {
-        userService.createNewUser(user);
-        return "redirect:/admin";
+    public String addCreateNewUser(@ModelAttribute("user") User user, @RequestParam("role") String roleName) {
+        userService.createNewUser(user,roleName);
+        return REDIRECT_ADMIN;
     }
 }
